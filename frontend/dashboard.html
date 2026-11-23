@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Upskilling Roadmap</title>
+    <style>
+        /* Base Styles */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background-color: #f4f7f6; color: #333; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
+        h2 { text-align: center; color: #2c3e50; margin-top: 0; }
+        
+        /* Form Controls */
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #34495e; }
+        select, input { width: 100%; padding: 12px; border: 1px solid #bdc3c7; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background: #2980b9; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #3498db; }
+        button:disabled { background: #95a5a6; cursor: not-allowed; }
+        
+        /* The Visual Roadmap Header */
+        .roadmap-header { background: #ecf0f1; padding: 20px; border-radius: 8px; margin-top: 30px; text-align: center; }
+        .roadmap-header h3 { margin-top: 0; color: #2c3e50; font-size: 22px; }
+        .missing-skills { color: #7f8c8d; font-size: 14px; margin-top: -10px; margin-bottom: 20px; }
+        
+        /* The Progress Bar */
+        .level-tracker { display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+        .level-box { background: #2980b9; color: white; padding: 8px 15px; border-radius: 20px; font-size: 14px; }
+        .target-box { background: #27ae60; color: white; padding: 8px 15px; border-radius: 20px; font-size: 14px; }
+        
+        .progress-line { flex-grow: 1; height: 4px; background: #bdc3c7; margin: 0 15px; position: relative; }
+        .progress-line::after { content: attr(data-timeline); position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 13px; color: #7f8c8d; font-weight: bold; }
+        
+        /* The Vertical Timeline */
+        .timeline { margin-top: 30px; border-left: 3px solid #3498db; padding-left: 20px; margin-left: 20px; }
+        .step { margin-bottom: 25px; position: relative; }
+        .step::before { content: ''; position: absolute; left: -29px; top: 0; width: 15px; height: 15px; background: white; border: 3px solid #3498db; border-radius: 50%; }
+        .step-day { font-size: 13px; color: #2980b9; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .step-desc { background: white; border: 1px solid #ecf0f1; padding: 15px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); line-height: 1.5; color: #2c3e50; }
+        
+        /* Link Styling for References */
+        .step-desc a { color: #2980b9; text-decoration: none; font-weight: 600; word-break: break-all; }
+        .step-desc a:hover { text-decoration: underline; }
+        
+        .loading { text-align: center; color: #7f8c8d; font-style: italic; margin-top: 20px; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Hyper-Personalized Upskilling</h2>
+        
+        <div class="form-group">
+            <label>Select Employee Profile</label>
+            <select id="empId">
+                <option value="123">123 - Rishi (Python/C++ Background)</option>
+                <option value="101">101 - Aarav (AI/ML Background)</option>
+                <option value="102">102 - Priya (Java Background)</option>
+                <option value="103">103 - Kavya (UI/UX Background)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Target Role / Capability Goal</label>
+            <input type="text" id="roadmap" value="Rust Production Backend Engineer">
+        </div>
+
+        <button onclick="fetchPlan()" id="genBtn">Generate Visual Roadmap</button>
+
+        <div id="output"></div>
+    </div>
+
+    <script>
+        // Simple helper to make URLs clickable if the AI returns raw links
+        function linkify(text) {
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, function(url) {
+                return '<a href="' + url + '" target="_blank">' + url + '</a>';
+            });
+        }
+
+        async function fetchPlan() {
+            const btn = document.getElementById('genBtn');
+            const output = document.getElementById('output');
+            
+            // 1. Get the values from the input fields
+            const empSelect = document.getElementById('empId');
+            const empName = empSelect.options[empSelect.selectedIndex].text.split('-')[1].split('(')[0].trim();
+            const roadmapGoal = document.getElementById('roadmap').value;
+
+            // --- THE INSTANT FRONTEND GUARDRAIL ---
+            // If the input does NOT contain the word "rust" (case-insensitive), block it instantly!
+            if (!roadmapGoal.toLowerCase().includes("rust")) {
+                output.innerHTML = `
+                    <div class="roadmap-header">
+                        <h3>Roadmap for ${empName}</h3>
+                        <p class="missing-skills" style="color: #e74c3c; font-weight: bold;">Security Alert: Access Denied</p>
+                    </div>
+                    <div class="timeline">
+                        <div class="step">
+                            <span class="step-day" style="color: #e74c3c;">Week 0</span>
+                            <div class="step-desc" style="border-left: 4px solid #e74c3c;">
+                                <strong>Access Denied:</strong> This learning platform is strictly configured for Rust upskilling only. Please submit a Rust-related capability goal.
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return; // Stop the function here! Do not call the AI server.
+            }
+            // ----------------------------------------
+            
+            btn.innerText = "Analyzing Gap & Building Roadmap...";
+            btn.disabled = true;
+            output.innerHTML = "<div class='loading'>AI is calculating your cognitive baseline and weekly milestones...</div>";
+            
+            try {
+                const response = await fetch('http://127.0.0.1:5000/generate-learning-plan', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        employee_id: empSelect.value, 
+                        roadmap: roadmapGoal 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                let html = `
+                    <div class="roadmap-header">
+                        <h3>Roadmap for ${data.employee}</h3>
+                        <p class="missing-skills">Missing Skills Identified: ${data.missing_skills}</p>
+                        
+                        <div class="level-tracker">
+                            <span class="level-box">Current: ${data.current_level}</span>
+                            <div class="progress-line" data-timeline="${data.timeline}"></div>
+                            <span class="target-box">Goal: ${data.target_level}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline">
+                `;
+                
+                if (Array.isArray(data.plan)) {
+                    data.plan.forEach(item => {
+                        // Using linkify to make any reference URLs clickable
+                        const formattedTopic = linkify(item.topic);
+                        
+                        html += `
+                            <div class="step">
+                                <span class="step-day">Week ${item.week}</span>
+                                <div class="step-desc">${formattedTopic}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += `<p style="color: red; padding: 15px;">Error: AI did not return a valid schedule array.</p>`;
+                }
+                
+                html += `</div>`; 
+                
+                output.innerHTML = html;
+                
+            } catch (error) {
+                console.error("Error fetching plan:", error);
+                output.innerHTML = `<p style="color: red; text-align: center; margin-top: 20px;">Error connecting to the AI Server. Make sure your Python backend is running.</p>`;
+            } finally {
+                btn.innerText = "Generate Visual Roadmap";
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

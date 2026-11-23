@@ -1,0 +1,48 @@
+{
+  "123": {
+    "employee_name": "Rishi",
+    "skills": {
+      "python": 9,
+      "c++": 7,
+      "docker": 6,
+      "rust": 0
+    }
+  },
+  "101": {
+    "employee_name": "Aarav",
+    "skills": {
+      "python": 9,
+      "machine_learning": 8,
+      "langchain": 8,
+      "rust": 2
+    }
+  },
+  "102": {
+    "employee_name": "Priya",
+    "skills": {
+      "java": 8,
+      "spring_boot": 7,
+      "sql": 7,
+      "rust": 0
+    }
+  },
+  "103": {
+    "employee_name": "Kavya",
+    "skills": {
+      "html": 9,
+      "css": 9,
+      "ui_ux_design": 8,
+      "react": 7,
+      "rust": 0
+    }
+  },
+  "104": {
+    "employee_name": "Vikram",
+    "skills": {
+      "python": 8,
+      "n8n": 8,
+      "docker": 7,
+      "rust": 1
+    }
+  }
+}
